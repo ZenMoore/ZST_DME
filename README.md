@@ -29,6 +29,7 @@
 - util.h 二叉树基本结构和函数定义
 - topoparser.h 二叉树生成部分的代码
 - draw.h 绘图部分的代码
+- DME.pdf 本大作业所使用的算法的介绍
 - CMakeLists.txt 项目部署配置文件(CLion)，不算在本大作业范围内
 - .gitignore 版本控制工具的辅助文件，不算在本大作业范围内
 
