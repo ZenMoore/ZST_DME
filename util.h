@@ -148,18 +148,6 @@ bool equals(TreeNode* a, TreeNode* b){
 // ------------------------------------树读取函数群-----------------------------------------------------
 //------------------------------------------------------------------------------------------------------------
 
-TreeNode* get_left(TreeNode* root){
-    return root->left_child;
-}
-
-TreeNode* get_right(TreeNode* root){
-    return root->right_child;
-}
-
-TreeNode* get_father(TreeNode* root){
-    return root->father;
-}
-
 TreeNode* get_brother(TreeNode* root){
     if(root->father == NULL){ //说明这个 root 是整个时钟树的 root 而不单单只是子树的 root, 因而其父节点为空
         return NULL;

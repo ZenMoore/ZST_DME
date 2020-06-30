@@ -27,10 +27,12 @@ typedef struct{
     TreeNode* rightnode;
 }Triple;
 
+Triple *path[MAX]; //路径数组，用于时钟树(二叉树)的构建，详见 readme 文件“算法步骤”
+
 float calc_dist(TreeNode* , TreeNode* );
 float get_nearest(TreeNode *[] , int , TreeNode *[]);
 TreeNode* merge_point( TreeNode*  , TreeNode* );
-TreeNode* generate(float (*)[2],int ,Triple *[]);
+TreeNode* topo_generate(float **sink_set, int n);
 void print_path(Triple* [], int );
 TreeNode* construct(Triple* [], int);
 
@@ -68,6 +70,9 @@ float get_nearest(TreeNode *recur_set[]  , int n , TreeNode *result[2]){
 
     for (i=0;i<n;i++){ // O(N^2)的查找
         for (j=0;j<n;j++){
+            if(recur_set[j] == NULL){
+                printf("yes");
+            }
             if (equals(recur_set[i],recur_set[j])){ //如果碰到一样的两个点(也就是同一个点)就跳过
                 continue;
             }
@@ -155,8 +160,11 @@ void print_path(Triple* path[], int n){
 *@param path 路径数组
 *@return 完成二叉树构建之后二叉树的根的指针 root
 **/
-TreeNode* generate(float (*sink_set)[2],int n, Triple *path[]){
+TreeNode* topo_generate(float **sink_set, int n){
     TreeNode** recur_array = (TreeNode**)malloc(n*sizeof(TreeNode*)); //递归数组；
+    for(int i = 0; i < MAX; i++){
+        path[i] = (Triple*)malloc(sizeof(Triple*));
+    } //初始化路径数组，每个元素为一个Triple的指针
     int conscounter = 0;  //用于路径数组填充的迭代
 
     //将坐标数组sink_set建立成树节点的集合
@@ -171,7 +179,7 @@ TreeNode* generate(float (*sink_set)[2],int n, Triple *path[]){
     while(arrsize > 1){
         TreeNode *result[2]; //用于存储最小间距点对
         float dmin = get_nearest(recur_array, arrsize, result); //最小间距点对的间距
-        printf("dmin=%f",dmin);
+        printf("minimum distance = %f", dmin);
         merging_point = merge_point(result[0],result[1]); //计算merging point节点
 
         // 从递归数组中删除最小间距点对 result[0] 和 result[1]

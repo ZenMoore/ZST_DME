@@ -75,6 +75,7 @@
 //        }
 //    }
 //    getch();
+//    fclose(fp);
 //    closegraph();
 //}
 //

@@ -8,6 +8,9 @@
 #include "util.h"
 #include <stdio.h>
 
+void generate_netlist(char* filename, TreeNode* root);
+void generate_netlist_op(FILE* file, TreeNode* node);
+
 /**
  *  生成网表文件
  *  步骤：
@@ -22,6 +25,7 @@ void generate_netlist(char* filename, TreeNode* root){
     fprintf(file, "%f, %f\n", root->x, root->y);
     fprintf(file, "%f, %f\n", root->right_child->x, root->right_child->y);
     generate_netlist_op(file, root);
+    fclose(file);
 }
 
 /**
@@ -37,7 +41,7 @@ void generate_netlist(char* filename, TreeNode* root){
  */
 void generate_netlist_op(FILE* file, TreeNode* node){
     if(node->left_child != NULL){
-        generate_netlist_op(node->left_child);
+        generate_netlist_op(file, node->left_child);
     }
     if(node->right_child != NULL){
         generate_netlist_op(file, node->right_child);

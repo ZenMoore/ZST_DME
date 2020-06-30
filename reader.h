@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <conio.h>
-#define KEY "Coordinate : " //声明检索关键字
 
 /**
  * 这个文件的代码主要用于读取 benchmark 文件，从中摘取有用的信息，包括：
@@ -13,6 +12,7 @@
  * - 引脚点的数量 NumPins
  */
 
+extern int numpins; //一个极为重要的外部变量，这个变量出现在 main.c 中，用来存储引脚点的数量
 
 /**
  * 利用动态内存分配创建点集的二维数组并进行初始化
@@ -23,7 +23,7 @@
 float **initialize(int num_row, int num_col)
 {
     float **sink_set;
-    sink_set=(int **)malloc(num_row*sizeof(float *));
+    sink_set=(float **)malloc(num_row * sizeof(float*));
     for(int i=0;i<num_row;i++)
     {
         sink_set[i]=(float *)malloc(num_col*sizeof(float));
@@ -36,151 +36,32 @@ float **initialize(int num_row, int num_col)
 }
 
 /**
- *
- * @param str
- * @param fp
+ * 使用文件指针一行一行的读取benchmark文件
+ * 1. 首先检索NumPins关键字，一旦读到，这个NumPins的数值就是点集的大小
+ * 2. 之后更换检索关键字为Coordinate, 将读到的坐标保存在点集中
+ * @param filename  benchmark文件名
+ * @return 引脚点点集
  */
-void Key_Select(char str[100], FILE*fp)//利用循环判断字符串中的单词是否为关键字，将符合条件的字符串存入file1
-{
-    int a, b, t, flag, len1, len2;
-    char c[50];
-    strcpy(c,KEY);//获取关键字的长度
-    len1 = strlen(str);
-    len2 = strlen(c);
-    flag = 0;
-    for( a = 0 ; a < len1 ; a++)
-    {
-        t = a;
-        for( b = 0 ; b < len2 ; )
-        {
-            if(str[t] == c[b])//判断该字符是否为关键字中字符且位置相同
-            {
-                t++;
-                b++;
-            }
-            else break;
-            if(b == len2)
-            {
-                flag = 1 ;//标志字符串中含有关键字
-            }
+float** read(char *filename){
+    FILE* file = fopen(filename, "r");
+
+    while(fgetc(file) != EOF){ //只要文件没有读到结尾
+        if(fscanf(file, "NumPins : %d", &numpins)){ //就进行字符传匹配
+            break; //匹配到之后就跳处循环，更换匹配关键字为Coordinate
         }
-
     }
-    if( flag == 1 )
-        fputs( str,  fp);
-}
 
-void Num_get(FILE *fp1, FILE *fp2)//从file1文件中读取内容，将字符串中的数字提取出来，按照行存入file2
-{
-    char ch[100];
-    int m = 0;
-    fp1 = fopen("file1", "r");
-    fp2 = fopen("file2", "w");
-    while( !feof(fp1) );
-    {
-        fgets(ch, sizeof(ch), fp1);//按行读取file1文件
-        while(ch[m])
-        {
-            if(ch[m]>='0'&&ch[m]<='9')//判断字符是否为数字
-            {
-                fputc(ch[m], fp2);//将该字符输入file2
-            }
-            else
-            {
-                if(ch[m-1]>='0'&&ch[m-1]<='9')
-                    fputc(" ", fp2);
-            }
-            m++;
+    float **sink_set = initialize(numpins, 2); //初始化点集数组(包括内存分配和初始赋值)
+    int pos = 0; //用于 sink_set 指针的移动，pos ++ 表示点的更换
+
+    while(fgetc(file) != EOF){ //只要文件没有读到结尾
+        if(fscanf(file, "\tCoordinate : %f %f", *(sink_set + pos), *(sink_set + pos)+1)){ //就进行字符串匹配
+            pos ++; //匹配到字符串后，对点集进行赋值(横坐标x和纵坐标y)，然后将pos移动到下一个点的位置
         }
-        printf("\n");
     }
-    fclose(fp1);
-    fclose(fp2);
+
+    fclose(file);
+    return sink_set;
 }
-
-void Para_give(FILE *fp)//利用fscanf函数将横坐标赋给p，将纵坐标赋给q。
-{
-    int p, q;
-    fp = fopen("file", "r");
-    fscanf(fp, "%d%d", &p, &q);
-    fclose(fp);
-}
-
-int main(void)
-{
-    char s[100];
-    FILE  *fp0;
-    FILE  *fp1;
-    FILE  *fp2;
-    int **pAlloc;
-    int lin = 128, col = 2;
-    int a, b, t, flag, len1, len2;
-    char ch[100];
-    int m = 0;
-    char c[50];
-    int p, q;
-    int i, j;
-    fp1 = fopen("file1", "w");
-    fp2 = fopen("file2", "w");
-    if( ( fp0 = fopen("file0","r"  ) ) == NULL )
-    {
-        printf("error\n");
-        exit(0);
-    }
-    do{
-        fgets( s, sizeof(s ), fp0 );//读取benchmark文件
-        Key_Select(s, fp1);
-        Num_get(fp1, fp2);
-        Para_give(fp2);
-        pAlloc = initialize(lin, col);
-        if (pAlloc == NULL)
-            return 1;
-        for(i=0; i<lin; i++ )
-        {
-            if(j = 0)
-                for(j=0; j<col-1; j++)
-                {
-                    pAlloc[i][j]= p;
-                }
-            else
-                for(j=1; j<col; j++)
-                {
-                    pAlloc[i][j]= q;
-                }
-        }
-        for (i=0; i<lin; i++)
-        {
-            for (j=0; j<col; j++)
-            {
-                printf("%3d", pAlloc[i][j]);//将二维数组输出
-                printf(" ");
-            }
-            printf("\n");
-        }
-        getch();
-        return 0;
-    }while( !feof(fp0) );
-
-    if( fclose( fp0 ) == EOF )//关闭文件
-    {
-        printf( "error\n" );
-        exit( 0 );
-    }
-    if( fclose( fp1) == EOF )
-    {
-        printf( "error\n" );
-        exit( 0 );
-    }
-    if( fclose( fp2) == EOF )
-    {
-        printf( "error\n" );
-        exit( 0 );
-    }
-
-    return 0;
-
-}
-
-
 
 #endif //ZST_DME_READ_H
