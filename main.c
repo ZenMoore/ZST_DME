@@ -39,8 +39,8 @@ int main() {
 
      /**
       * 画出时钟树 (注意看 readme 文件里面对这一部分运行的要求)
+      * 需要转到 embedding 程序
       */
-//      draw(netlist_file_path);
 
     return 0;
 }

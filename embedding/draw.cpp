@@ -92,7 +92,7 @@ void draw(const char* netlist){
 }
 
 int main(){
-	draw("这里填入netlist.txt的路径名");//推荐使用绝对路径
+	draw("path-to-ZST-DME\\ZST-DME\\embedding\\netlist.txt");//todo 这里编辑 netlist.txt 的绝对路径
 }
 
 #endif //ZST_DME_DRAW_H
