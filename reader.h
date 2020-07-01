@@ -42,7 +42,7 @@ float **initialize(int num_row, int num_col)
  * @param filename  benchmark文件名
  * @return 引脚点点集
  */
-float** read(char *filename){
+float** read(const char *filename){
     FILE* file = fopen(filename, "r");
 
     while(fgetc(file) != EOF){ //只要文件没有读到结尾

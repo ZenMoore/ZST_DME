@@ -4,7 +4,6 @@
 #include "util.h"
 #include "topoparser.h"
 #include "netlist.h"
-#include "draw.h"
 
 
 /**
@@ -13,9 +12,9 @@
  * 老师辛苦了！
  */
 
-char* benchmark_file_path = "D:\\ClC++\\Workplace\\ZST-DME\\benchmark.txt"; //benchmark文件的绝对路径
+const char* benchmark_file_path = "path-to-ZST-DME\\ZST-DME\\benchmark.txt"; //todo benchmark.txt文件的绝对路径
 int numpins = 0; //存储引脚点的数量
-char* netlist_file_path = "D:\\ClC++\\Workplace\\ZST-DME\\netlist.txt";
+const char* netlist_file_path = "path-to-ZST-DME\\ZST-DME\\embedding\\netlist.txt"; //todo netlist.txt文件的绝对路径
 
 int main() {
 

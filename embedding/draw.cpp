@@ -1,10 +1,44 @@
 //
-// Created by ZenMoore on 2020/7/1.
+// Created by ZenMoore on 2020/6/25.
 //
 
-#include "draw.h"
 
-void draw(char* netlist){
+#ifndef ZST_DME_DRAW_H
+#define ZST_DME_DRAW_H
+
+#include<stdio.h>
+#include<graphics.h>
+#include<conio.h>
+#include <math.h>
+
+/**
+ * 写在前面：
+ * 本文件代码超出了本学期所学 C 语言范围，因此单独拿出
+ * 在运行本文件时候，首先需要下载 graphics.h (详见 readme 文件)
+ * 并且确保本文件程序的运行环境配套 (推荐使用 Visual Studio IDE)
+ * 如果无法运行，可以是两个原因：
+ * 1. netlist.txt 的路径给的不对，请在本文件的 main 函数里面手动修改
+ * (本来考虑使用相对路径，但是我们发现不同的 IDE 对相对路径的位置定性不同)
+ * 2. 没有配置好运行环境，建议在 Visual Studio 中新建项目“ C++ 控制台应用程序”，然后将本代码复制粘贴
+ */
+
+/**
+ * number1/number2/number3分别表示一个Triple中左子节点/父节点/右子节点的横纵坐标
+ * Triple 表示某节点及其左子节点和右子节点
+ */
+struct number
+{
+    float x;
+    float y;
+}num1, num2, num3;
+
+/**
+ * 输入网表文件名，根据网表文件画出时钟树布线图像
+ * 注意：该函数对运行环境的要求比较高，建议使用 Visual Studio 运行
+ * graphics.h 的安装使用 EasyX，安装在 Visual C++ 2015-2019 环境中
+ * @param netlist
+ */
+void draw(const char* netlist){
 
     FILE* fp;
     fp = fopen(netlist, "r");
@@ -57,4 +91,8 @@ void draw(char* netlist){
     closegraph();
 }
 
+int main(){
+	draw("这里填入netlist.txt的路径名");//推荐使用绝对路径
+}
 
+#endif //ZST_DME_DRAW_H

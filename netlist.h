@@ -8,7 +8,7 @@
 #include "util.h"
 #include <stdio.h>
 
-void generate_netlist(char* filename, TreeNode* root);
+void generate_netlist(const char* filename, TreeNode* root);
 void generate_netlist_op(FILE* file, TreeNode* node);
 
 /**
@@ -19,7 +19,7 @@ void generate_netlist_op(FILE* file, TreeNode* node);
  * @param filename 网表的输出文件名
  * @param root  整颗二叉树的根节点
  */
-void generate_netlist(char* filename, TreeNode* root){
+void generate_netlist(const char* filename, TreeNode* root){
     FILE* file = fopen(filename, "w");
     fprintf(file, "%f, %f\n", root->left_child->x, root->left_child->y);
     fprintf(file, "%f, %f\n", root->x, root->y);
