@@ -70,9 +70,6 @@ float get_nearest(TreeNode *recur_set[]  , int n , TreeNode *result[2]){
 
     for (i=0;i<n;i++){ // O(N^2)的查找
         for (j=0;j<n;j++){
-            if(recur_set[j] == NULL){
-                printf("yes");
-            }
             if (equals(recur_set[i],recur_set[j])){ //如果碰到一样的两个点(也就是同一个点)就跳过
                 continue;
             }
@@ -194,7 +191,7 @@ TreeNode* topo_generate(float **sink_set, int n){
             }
         }
 
-        recur_array[arrsize-1] = merging_point;//填入merging_point
+        recur_array[arrsize] = merging_point;//新增merging_point
         arrsize++; // 递归数组长度加一
 
         //建立Triple并填入路径数组
